@@ -19,10 +19,23 @@ static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const char col_pink[]        = "#f25f86";
+
+static const char col_black[]       = "#000000";
+static const char col_red[]         = "#ff0000";
+static const char col_yellow[]      = "#ffff00";
+static const char col_white[]       = "#ffffff";
+
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_pink  },
+
+	/*					fg         bg          border   */
+	[SchemeNorm] =	 { col_gray3, col_gray1,  col_gray2 },
+	[SchemeSel]  =	 { col_gray4, col_cyan,   col_pink},
+	[SchemeWarn] =	 { col_black, col_yellow, col_red },
+	[SchemeUrgent]=	 { col_white, col_red,    col_red },
+
 };
 
 /* tagging */
@@ -34,8 +47,11 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+//	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+//	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class      instance    title       tags mask     isfloating   isfakefullscreen monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,           0,               -1 },
+	{ "Firefox",  NULL,       NULL,       -1,            0,           1,               -1 },
 };
 
 /* layout(s) */
@@ -70,17 +86,6 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "alacritty", NULL };
 
 #include <X11/XF86keysym.h>
-//static const char *upvol[] = { "amixer", "set", "Master", "2+", NULL };
-//static const char *downvol[] = { "amixer", "set", "Master", "2-", NULL };
-//
-//// for muting/unmuting //
-//static const char *mute[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
-
-// for pulse compatible //
-//static const char *upvol[] = { "pamixer", "--allow-boost", "-i", "2"};
-//static const char *downvol[] = { "pamixer", "--allow-boost", "-i", "2"};
-//static const char *mutevol[] = { "pamixer", "-t" };
-
 #include "shiftview.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -130,9 +135,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 
 
-	{ 0,                       XF86XK_AudioLowerVolume, spawn, SHCMD("pamixer --allow-boost -d 3; kill -44 $(pidof dwmblocks)") },
-	{ 0,                       XF86XK_AudioMute, spawn, SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
-	{ 0,                       XF86XK_AudioRaiseVolume, spawn, SHCMD("pamixer --allow-boost -i 3; kill -44 $(pidof dwmblocks)") },
+	{ 0,                       XF86XK_AudioLowerVolume, spawn, SHCMD("pamixer --allow-boost -d 3)") },
+	{ 0,                       XF86XK_AudioMute, spawn, SHCMD("pamixer -t)") },
+	{ 0,                       XF86XK_AudioRaiseVolume, spawn, SHCMD("pamixer --allow-boost -i 3)") },
 
 };
 
